@@ -1,0 +1,6 @@
+{
+  "name": "BridgeCore Cloud Engine",
+  "description": "The central national digital health operating backbone for Rwanda, illustrating 12 synchronized applications, 7 internal services, and live integration pipelines with OpenMRS, e-Ubuzima, e-Banguka, and RSSB.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
