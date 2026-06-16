@@ -1,34 +1,44 @@
-          name: Auto Sync Cloud Repo
+                    name: Auto Sync All AI Repos
 
-          on:
-            push:
-              branches:
-                - main
-            workflow_dispatch:
-            schedule:
-              - cron: "*/10 * * * *"
+                    on:
+                      push:
+                        branches:
+                          - main
+                      workflow_dispatch:
+                      schedule:
+                        - cron: "*/10 * * * *"
 
-          jobs:
-            sync:
-              runs-on: ubuntu-latest
+                    jobs:
+                      sync:
+                        runs-on: ubuntu-latest
 
-              steps:
-                - name: Checkout master repo
-                  uses: actions/checkout@v4
+                        steps:
+                          - name: Checkout master repo
+                            uses: actions/checkout@v4
 
-                - name: Remove old cloud copy
-                  run: rm -rf synced/cloud
+                          # =========================
+                          # SYNC REPO 1
+                          # =========================
+                          - name: Sync Bridge2Agency-cloud
+                            run: |
+                              rm -rf synced/cloud
+                              git clone https://github.com/micomyizaemerton-ship-it/Bridge2Agency-cloud.git synced/cloud
 
-                - name: Clone latest cloud repo
-                  run: git clone https://github.com/micomyizaemerton-ship-it/Bridge2Agency-cloud.git synced/cloud
+                          # =========================
+                          # SYNC REPO 2
+                          # =========================
+                          - name: Sync bridgeCare
+                            run: |
+                              rm -rf synced/bridgeCare
+                              git clone https://github.com/micomyizaemerton-ship-it/bridgeCare.git synced/bridgeCare
 
-                - name: Set git identity
-                  run: |
-                    git config user.name "auto-sync-bot"
-                    git config user.email "bot@users.noreply.github.com"
-
-                - name: Commit changes
-                  run: |
-                    git add synced/cloud
-                    git commit -m "auto-sync cloud update" || echo "no changes"
-                    git push
+                          # =========================
+                          # COMMIT & PUSH CHANGES
+                          # =========================
+                          - name: Commit updates
+                            run: |
+                              git config user.name "auto-sync-bot"
+                              git config user.email "bot@users.noreply.github.com"
+                              git add synced
+                              git commit -m "auto-sync: update all AI repos" || echo "no changes"
+                              git push
