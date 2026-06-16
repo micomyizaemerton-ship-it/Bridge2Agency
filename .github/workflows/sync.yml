@@ -1,0 +1,28 @@
+name: Auto Sync Cloud Repo
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout master repo
+        uses: actions/checkout@v4
+
+      - name: Remove old cloud copy
+        run: rm -rf synced/cloud
+
+      - name: Clone latest cloud repo
+        run: git clone https://github.com/micomyizaemerton-ship-it/Bridge2Agency-cloud.git synced/cloud
+
+      - name: Commit changes
+        run: |
+          git config user.name "auto-sync-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add synced/cloud
+          git commit -m "auto-sync cloud update" || echo "no changes"
+          git push
